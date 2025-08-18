@@ -4,7 +4,7 @@ A crime has taken place and the detective needs your help. The detective gave yo
 
 ## **SCHEMA**
 
-![alt text](schema.png)
+![alt text](images/schema.png)
 
 ## **APPROACH**
 1. **Used the initial given information**
