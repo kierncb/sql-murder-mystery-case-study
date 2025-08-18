@@ -22,6 +22,7 @@ WHERE
     AND date = 20180115
 ```
 
+
 2. **Looked for the witness named "Annabel"**
 
 ```sql
@@ -29,13 +30,17 @@ SELECT *
 FROM person
 WHERE
     address_street_name = "Franklin Ave"
-    AND name LIKE = "%Annabel%"
+    AND name LIKE   "%Annabel%"
 ```
 
 3. **Looked for Annabels's interview transcript**
 
 ```sql
-SELECT *
+SELECT
+    id,
+    name,
+    address_street_name,
+    transcript
 FROM person
 JOIN interview
     ON interview.person_id = person.id
@@ -59,30 +64,44 @@ JOIN get_fit_now_member
     ON get_fit_now_member.person_id = person.id
 WHERE
     person.address_street_name = "Franklin Ave"
-    AND perso.name LIKE "%Annabel%"
+    AND person.name LIKE "%Annabel%"
 ```
 5. **Since she saw the killer when she was working out on January 19th**
 
 ```sql
-SELECT *
+SELECT
+    person_id,
+    name,
+    membership_status,
+    check_in_time,
+    check_out_time
 FROM get_fit_now_check_in
 JOIN get_fit_now_member
-ON get_fit_now_member.id = get_fit_now_check_in.membership_id
+    ON get_fit_now_member.id = get_fit_now_check_in.membership_id
 WHERE
-membership_status = "gold"
-AND check_in_date IN (20170109, 20180109)
+    membership_status = "gold"
+    AND check_in_date IN (20170109, 20180109)
+    AND check_in_time < 1700 -- check-in must be before Annabel leaves
+    AND check_out_time > 1600 -- check-out must be after Annabel enters
 ORDER BY get_fit_now_check_in.check_in_date
 ```
 
 6. **Looked for the interview transcript of the 2nd witness**
 
 ```sql
-SELECT *
+SELECT
+    id,
+    name,
+    address_number,
+    address_street_name,
+    transcript
 FROM person
 JOIN interview
-ON interview.person_id = person.id
-WHERE address_street_name = "Northwestern Dr"
+    ON interview.person_id = person.id
+WHERE 
+    address_street_name = "Northwestern Dr"
 ORDER BY address_number DESC
+LIMIT 1
 ```
 
 7. **Checked the given plate number of the suspect**
