@@ -21,7 +21,7 @@ WHERE
     AND type = "murder"
     AND date = 20180115
 ```
-
+![alt text](images/1.png)
 
 2. **Looked for the witness named "Annabel"**
 
@@ -32,6 +32,7 @@ WHERE
     address_street_name = "Franklin Ave"
     AND name LIKE   "%Annabel%"
 ```
+![alt text](images/2.png)
 
 3. **Looked for Annabels's interview transcript**
 
@@ -48,6 +49,7 @@ WHERE
     address_street_name = "Franklin Ave"
     AND name LIKE "%Annabel%"
 ```
+![alt text](images/3.png)
 
 4. **Since she recognized the killer from her gym, looked at her gym details**
 
@@ -66,6 +68,8 @@ WHERE
     person.address_street_name = "Franklin Ave"
     AND person.name LIKE "%Annabel%"
 ```
+![alt text](images/4.png)
+
 5. **She saw the killer when she was working out on January 19th**
 
 ```sql
@@ -85,6 +89,7 @@ WHERE
     AND check_out_time > 1600 -- check-out must be after Annabel enters
 ORDER BY get_fit_now_check_in.check_in_date
 ```
+![alt text](images/5.png)
 
 6. **Looked for the interview transcript of the 2nd witness**
 
@@ -103,6 +108,7 @@ WHERE
 ORDER BY address_number DESC
 LIMIT 1
 ```
+![alt text](images/6.png)
 
 7. **Checked the given plate number and membership status of the suspect**
 
@@ -133,12 +139,16 @@ JOIN drivers_license
     ON person.license_id = drivers_license.id
 
 ```
+![alt text](images/7.png)
+
 8. **Verified if the killer had already been identified**
 
 ```sql
 INSERT INTO solution VALUES (1, "Jeremy Bowers");
 SELECT values FROM solution;
 ```
+
+![alt text](images/8.png)
 
 9. **Now, check for the mastermind according to ther killer**
 
@@ -147,6 +157,7 @@ SELECT *
 FROM interview
 WHERE person_id = 67318
 ```
+![alt text](images/9.png)
 
 10. **The mastermind based on killer's transcript**
 
@@ -181,6 +192,7 @@ GROUP BY
 HAVING 
     COUNT(person_id) = 3
 ```
+![alt text](images/10.png)
 
 11. **Verified if I found the mastermind**
 
@@ -188,3 +200,5 @@ HAVING
 INSERT INTO solution VALUES (1, "Miranda Priestly")
 SELECT value FROM solution;
 ```
+
+![alt text](images/11.png)
