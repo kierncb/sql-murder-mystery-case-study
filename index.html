@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SQL Murder Mystery: Executive Summary</title>
+<meta name="description" content="Eleven SQL queries from a lost crime report to the killer, Jeremy Bowers, and the mastermind, Miranda Priestly.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0B0C;--fg:#F2F2EF;--dim:#8C8C8C;--line:#242424;--card:#131313;--accent:#5B8DFF;--ink:#6B6B6B;--head:'Space Grotesk',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#FAFAF8;--fg:#151513;--dim:#6F6F6A;--line:#E4E4DF;--card:#FFFFFF;--accent:#3E6FEA;--ink:#151513}}
+:root[data-theme="light"]{--bg:#FAFAF8;--fg:#151513;--dim:#6F6F6A;--line:#E4E4DF;--card:#FFFFFF;--accent:#3E6FEA;--ink:#151513}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:hidden}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:780px;margin:0 auto;padding:0 24px 80px}
+nav{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:24px 0;font-size:13px;color:var(--dim);border-bottom:1px solid var(--line);margin-bottom:32px}
+.pill{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;flex:none}
+.pill button{all:unset;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.pill button svg{width:14px;height:14px}
+.pill button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.pill button:focus-visible{outline:2px solid var(--accent)}
+h1,h2,h3,.big{font-family:var(--head);letter-spacing:-.02em;line-height:1.15}
+h1{font-size:36px;margin-bottom:10px}
+h2{font-size:22px;margin:56px 0 6px}
+h3{font-size:15px;font-weight:600}
+.sub,.cap{font-size:13.5px;color:var(--dim);max-width:60ch}
+.cap{margin-top:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:18px}
+.culprits{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:20px}
+.culprits .card{margin-top:0;padding:18px 22px}
+.culprits .lbl{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.big{font-size:34px;font-weight:700;margin-top:4px;display:block}
+.culprits .killer{border-color:var(--accent)}.culprits .killer .big{color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px}.stats .card{margin-top:0;padding:14px 16px}
+.stat b{font-family:var(--head);font-size:26px;display:block;line-height:1.1}
+.stat span{font-size:12.5px;color:var(--dim)}
+.trail{list-style:none;margin-top:16px;border-left:2px solid var(--line);margin-left:14px}
+.trail li{position:relative;padding:0 0 18px 28px}
+.trail li:last-child{padding-bottom:0}
+.trail li::before{content:attr(data-n);position:absolute;left:-15px;top:0;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);font:600 12px var(--head);display:flex;align-items:center;justify-content:center}
+.trail li.hit::before{background:var(--accent);color:#fff}
+.trail h3{font-size:14.5px}
+.trail p{font-size:13.5px;color:var(--dim);margin-top:2px;max-width:62ch}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tags span{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.tags span.core{background:var(--accent);border-color:var(--accent);color:#fff}
+.recs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
+.rec{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.rec b{font-family:var(--head);font-size:13px;color:var(--accent)}
+.rec h3{font-size:14px}
+.rec p{color:var(--dim);font-size:13px}
+.links{display:flex;gap:10px;margin-top:40px;flex-wrap:wrap}
+.links a{padding:8px 16px;border:1px solid var(--line);border-radius:999px;color:var(--fg);text-decoration:none;font-size:13px}
+.links a.gh{background:var(--accent);border-color:var(--accent);color:#fff}
+@media(max-width:640px){h1{font-size:28px}.big{font-size:28px}.wrap{padding:0 18px 70px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav><span>Case study · SQL murder mystery</span>
+<span class="pill" role="group" aria-label="Theme">
+<button data-t="auto" aria-pressed="true" aria-label="Automatic theme"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+<button data-t="light" aria-pressed="false" aria-label="Light theme"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M12 2V4M12 20V22M4 12H2M22 12H20M19.07 4.93L17.66 6.34M6.34 17.66L4.93 19.07M19.07 19.07L17.66 17.66M6.34 6.34L4.93 4.93" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+<button data-t="dark" aria-pressed="false" aria-label="Dark theme"><svg viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+</span></nav>
+
+<header>
+<h1>Solving a murder with SQL</h1>
+<p class="sub">A murder happened in SQL City on Jan. 15, 2018, and the crime report was lost. Starting from those three facts, I used SQL to trace the killer and the person behind the crime.</p>
+</header>
+
+<div class="culprits">
+<div class="card killer"><span class="lbl">The killer</span><span class="big">Jeremy Bowers</span></div>
+<div class="card"><span class="lbl">The mastermind</span><span class="big">Miranda Priestly</span></div>
+</div>
+
+<div class="stats">
+<div class="card stat"><b>11</b><span>steps from lost report to closed case</span></div>
+<div class="card stat"><b>7</b><span>tables queried and joined</span></div>
+<div class="card stat"><b>2</b><span>culprits confirmed in the solution table</span></div>
+</div>
+
+<h2>The investigation trail</h2>
+<p class="sub">Each query used what the previous one revealed. Blue marks the two breakthroughs.</p>
+
+<ol class="trail">
+<li data-n="1"><h3>Recover the crime scene report</h3><p>Filtered the report table by city (SQL City), type (murder) and date (Jan. 15, 2018) to find the two witnesses.</p></li>
+<li data-n="2"><h3>Find witness one, Annabel</h3><p>Matched a name pattern on Franklin Ave in the person table, then joined to the interview table for her transcript.</p></li>
+<li data-n="3"><h3>Follow the gym lead</h3><p>Annabel recognized the killer from her gym. I joined gym membership and check-in records and kept gold members whose visit times overlapped hers.</p></li>
+<li data-n="4"><h3>Read witness two’s interview</h3><p>Found the witness in the last house on Northwestern Dr by sorting house numbers in descending order and taking the top row.</p></li>
+<li data-n="5" class="hit"><h3>Identify the killer</h3><p>Combined the gold membership, a membership ID pattern and the plate number from the driver’s license table, using a CTE and joins. This pointed to Jeremy Bowers, confirmed against the solution table.</p></li>
+<li data-n="6"><h3>Read the killer’s interview</h3><p>With the killer found, his own interview transcript revealed that someone else had hired him.</p></li>
+<li data-n="7" class="hit"><h3>Unmask the mastermind</h3><p>Filtered Facebook check-ins for people who attended the SQL Symphony Concert three times in December 2017, then matched them to the described driver’s license details. Miranda Priestly was confirmed in the solution table.</p></li>
+</ol>
+
+<h2>What this shows</h2>
+<div class="recs">
+<div class="rec"><b>01</b><h3>Start small, then chain</h3><p>Begin with the few known facts and let every result shape the next query.</p></div>
+<div class="rec"><b>02</b><h3>Join across sources</h3><p>The answer lived across tables. Joins connected people, interviews, memberships, licenses and events.</p></div>
+<div class="rec"><b>03</b><h3>Filter precisely</h3><p>Pattern matching, date ranges, time overlaps and HAVING counts turned vague clues into a short list.</p></div>
+<div class="rec"><b>04</b><h3>Verify every conclusion</h3><p>Each finding was checked against the solution table before moving on.</p></div>
+</div>
+
+<div class="tags">
+<span>SELECT</span><span>JOIN</span><span>WHERE</span><span>LIKE</span><span>CTE (WITH)</span><span>GROUP BY</span><span>HAVING</span><span>ORDER BY</span><span>LIMIT</span>
+</div>
+<p class="cap">SQL skills used across the investigation.</p>
+
+<div class="links">
+<a class="gh" href="https://github.com/kierncb/sql-murder-mystery-case-study">GitHub</a>
+<a href="https://mystery.knightlab.com/">Original SQL Murder Mystery</a>
+<a href="https://kierncb.vercel.app/">Portfolio</a>
+</div>
+</div>
+<script>
+(function(){var r=document.documentElement,b=document.querySelectorAll('[data-t]'),media=window.matchMedia?matchMedia('(prefers-color-scheme: light)'):null,selected='auto';
+function apply(){var resolved=selected==='auto'?(media&&media.matches?'light':'dark'):selected;r.setAttribute('data-theme',resolved);b.forEach(function(x){x.setAttribute('aria-pressed',String(x.dataset.t===selected));});}
+var s=null;try{s=localStorage.getItem('theme');}catch(e){}
+selected=(s==='light'||s==='dark'||s==='auto')?s:'auto';
+apply();
+b.forEach(function(x){x.addEventListener('click',function(){selected=x.dataset.t;apply();try{localStorage.setItem('theme',selected);}catch(e){}});});
+if(media){var changed=function(){if(selected==='auto')apply();};if(media.addEventListener)media.addEventListener('change',changed);else media.addListener(changed);}
+})();
+</script>
+</body>
+</html>
